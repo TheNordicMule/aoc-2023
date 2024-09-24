@@ -1,47 +1,72 @@
 open Core
 
+(* Function to check if a character is a digit *)
+let is_digit = function '0' .. '9' -> true | _ -> false
+
 (*let match_string_with_digit = function*)
-(*  | "one" -> Some 1*)
-(*  | "two" -> Some 2*)
-(*  | "three" -> Some 3*)
-(*  | "four" -> Some 4*)
-(*  | "five" -> Some 5*)
-(*  | "six" -> Some 6*)
-(*  | "seven" -> Some 7*)
-(*  | "eight" -> Some 8*)
-(*  | "nine" -> Some 9*)
-(*  | _ -> None*)
+(*  | "one" -> "1"*)
+(*  | "two" -> "2"*)
+(*  | "three" -> "3"*)
+(*  | "four" -> "4"*)
+(*  | "five" -> "5"*)
+(*  | "six" -> "6"*)
+(*  | "seven" -> "7"*)
+(*  | "eight" -> "8"*)
+(*  | "nine" -> "9"*)
+(*  | s -> s*)
 (**)
-(*let lst_of_digit_string =*)
-(*  [ "one"; "two"; "three"; "four"; "five"; "six"; "seven"; "eight"; "nine" ]*)
+let rec char_list_with_digit = function
+  | c :: _ when is_digit c ->
+      Some c (* If the first character is a digit, return it *)
+  | 'o' :: 'n' :: 'e' :: _ -> Some '1'
+  | 't' :: 'w' :: 'o' :: _ -> Some '2'
+  | 't' :: 'h' :: 'r' :: 'e' :: 'e' :: _ -> Some '3'
+  | 'f' :: 'o' :: 'u' :: 'r' :: _ -> Some '4'
+  | 'f' :: 'i' :: 'v' :: 'e' :: _ -> Some '5'
+  | 's' :: 'i' :: 'x' :: _ -> Some '6'
+  | 's' :: 'e' :: 'v' :: 'e' :: 'n' :: _ -> Some '7'
+  | 'e' :: 'i' :: 'g' :: 'h' :: 't' :: _ -> Some '8'
+  | 'n' :: 'i' :: 'n' :: 'e' :: _ -> Some '9'
+  | _ :: t -> char_list_with_digit t
+  | [] -> None
+
+let rec reverse_map = function
+  | c :: _ when is_digit c ->
+      Some c (* If the first character is a digit, return it *)
+  | 'e' :: 'n' :: 'o' :: _ -> Some '1'
+  | 'o' :: 'w' :: 't' :: _ -> Some '2'
+  | 'e' :: 'e' :: 'r' :: 'h' :: 't' :: _ -> Some '3'
+  | 'r' :: 'u' :: 'o' :: 'f' :: _ -> Some '4'
+  | 'e' :: 'v' :: 'i' :: 'f' :: _ -> Some '5'
+  | 'x' :: 'i' :: 's' :: _ -> Some '6'
+  | 'n' :: 'e' :: 'v' :: 'e' :: 's' :: _ -> Some '7'
+  | 't' :: 'h' :: 'g' :: 'i' :: 'e' :: _ -> Some '8'
+  | 'e' :: 'n' :: 'i' :: 'n' :: _ -> Some '9'
+  | _ :: t -> reverse_map t
+  | [] -> None
 
 let solution =
   (* Function to read the file lines *)
   let r file = In_channel.read_lines file in
 
-  (* Function to check if a character is a digit *)
-  let is_digit = function '0' .. '9' -> true | _ -> false in
-
   (* Read content of the file *)
   let content = r "./data.txt" in
 
-  (* Get the first digit from a char list *)
-  let get_number lst = List.find lst ~f:is_digit in
+  let get_first_digit s = s |> String.to_list |> char_list_with_digit in
 
-  (* Get the last digit from a char list *)
-  let get_last lst = lst |> List.rev |> get_number in
+  let get_last s = s |> String.to_list |> List.rev |> reverse_map in
 
   (* Map over the content and apply the functions *)
   let first =
     List.map content ~f:(fun line ->
-        match get_number (String.to_list line) with
+        match get_first_digit line with
         | Some c -> Char.to_int c - Char.to_int '0'
         | None -> failwith "no first digit")
   in
 
   let last =
     List.map content ~f:(fun line ->
-        match get_last (String.to_list line) with
+        match get_last line with
         | Some c -> Char.to_int c - Char.to_int '0'
         | None -> failwith "no last digit")
   in
