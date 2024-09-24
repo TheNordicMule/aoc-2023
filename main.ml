@@ -3,18 +3,6 @@ open Core
 (* Function to check if a character is a digit *)
 let is_digit = function '0' .. '9' -> true | _ -> false
 
-(*let match_string_with_digit = function*)
-(*  | "one" -> "1"*)
-(*  | "two" -> "2"*)
-(*  | "three" -> "3"*)
-(*  | "four" -> "4"*)
-(*  | "five" -> "5"*)
-(*  | "six" -> "6"*)
-(*  | "seven" -> "7"*)
-(*  | "eight" -> "8"*)
-(*  | "nine" -> "9"*)
-(*  | s -> s*)
-(**)
 let rec char_list_with_digit = function
   | c :: _ when is_digit c ->
       Some c (* If the first character is a digit, return it *)
