@@ -40,7 +40,7 @@ let solution =
   (* Function to read the file lines *)
   let r file = In_channel.read_lines file in
   (* Read content of the file *)
-  let content = r "./data.txt" in
+  let content = r "./input/day1.txt" in
   let get_first_digit s = s |> String.to_list |> char_list_with_digit in
   let get_last s = s |> String.to_list |> List.rev |> reverse_map in
   (* Map over the content and apply the functions *)
