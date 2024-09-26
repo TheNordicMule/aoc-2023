@@ -1,7 +1,7 @@
 open Core
 
 let judge_number_is_not_sufficient couple =
-  match String.split ~on:' ' (couple |> String.strip) with
+  match couple |> String.strip |> String.split ~on:' ' with
   | [ number; "red" ] -> int_of_string number > 12
   | [ number; "green" ] -> int_of_string number > 13
   | [ number; "blue" ] -> int_of_string number > 14
