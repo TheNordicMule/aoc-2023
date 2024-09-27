@@ -91,4 +91,4 @@ let pt_2 =
 ;;
 
 let _ = pt_1 |> Fmt.pr "@.part 1: %i" in
-pt_2 |> Fmt.pr "@.part2: %i"
+pt_2 |> Fmt.pr "@.part 2: %i@."
