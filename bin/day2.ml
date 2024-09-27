@@ -76,14 +76,14 @@ let calculate_line_power = function
 let calculate_game_power_score acc line =
   let parts = String.split ~on:':' line in
   let game = List.nth_exn parts 1 in
-  let line_game_color =
+  let line_power =
     game
     |> String.split ~on:';'
     |> List.map ~f:(fun a -> String.split ~on:',' a)
     |> List.concat
     |> List.fold ~init:{ red = 0; green = 0; blue = 0 } ~f:split_and_calc_line_score
+    |> calculate_line_power
   in
-  let line_power = calculate_line_power line_game_color in
   line_power + acc
 ;;
 
