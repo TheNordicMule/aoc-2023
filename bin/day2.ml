@@ -12,11 +12,13 @@ let judge_number_is_not_sufficient couple =
 
 let calculate_line_should_score line =
   let parts = String.split ~on:':' line in
-  let game = List.nth_exn parts 1 in
-  let turns = String.split ~on:';' game in
-  let details = List.map turns ~f:(fun a -> String.split ~on:',' a) |> List.concat in
-  (*Fmt.pr "details: @.%a" (Fmt.list Fmt.string) details;*)
-  let break = List.find details ~f:judge_number_is_not_sufficient in
+  let break =
+    List.nth_exn parts 1
+    |> String.split ~on:';'
+    |> List.map ~f:(fun a -> String.split ~on:',' a)
+    |> List.concat
+    |> List.find ~f:judge_number_is_not_sufficient
+  in
   match break with
   | Some _ -> false
   | None -> true
@@ -74,10 +76,12 @@ let calculate_line_power = function
 let calculate_game_power_score acc line =
   let parts = String.split ~on:':' line in
   let game = List.nth_exn parts 1 in
-  let turns = String.split ~on:';' game in
-  let details = List.map turns ~f:(fun a -> String.split ~on:',' a) |> List.concat in
   let line_game_color =
-    List.fold details ~init:{ red = 0; green = 0; blue = 0 } ~f:split_and_calc_line_score
+    game
+    |> String.split ~on:';'
+    |> List.map ~f:(fun a -> String.split ~on:',' a)
+    |> List.concat
+    |> List.fold ~init:{ red = 0; green = 0; blue = 0 } ~f:split_and_calc_line_score
   in
   let line_power = calculate_line_power line_game_color in
   line_power + acc
