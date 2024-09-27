@@ -50,14 +50,20 @@ type game_color =
   ; blue : int
   }
 
-let calculate_line_color acc curr =
+let calculate_line_color acc number color =
+  match number, color with
+  | number, "red" when number > acc.red ->
+    { red = number; green = acc.green; blue = acc.blue }
+  | number, "green" when number > acc.green ->
+    { red = acc.red; green = number; blue = acc.blue }
+  | number, "blue" when number > acc.blue ->
+    { red = acc.red; green = acc.green; blue = number }
+  | _ -> acc
+;;
+
+let split_and_calc_line_score acc curr =
   match curr |> String.strip |> String.split ~on:' ' with
-  | [ number; "red" ] when int_of_string number > acc.red ->
-    { red = int_of_string number; green = acc.green; blue = acc.blue }
-  | [ number; "green" ] when int_of_string number > acc.green ->
-    { red = acc.red; green = int_of_string number; blue = acc.blue }
-  | [ number; "blue" ] when int_of_string number > acc.blue ->
-    { red = acc.red; green = acc.green; blue = int_of_string number }
+  | [ number; color ] -> calculate_line_color acc (int_of_string number) color
   | _ -> acc
 ;;
 
@@ -71,7 +77,7 @@ let calculate_game_power_score acc line =
   let turns = String.split ~on:';' game in
   let details = List.map turns ~f:(fun a -> String.split ~on:',' a) |> List.concat in
   let line_game_color =
-    List.fold details ~init:{ red = 0; green = 0; blue = 0 } ~f:calculate_line_color
+    List.fold details ~init:{ red = 0; green = 0; blue = 0 } ~f:split_and_calc_line_score
   in
   let line_power = calculate_line_power line_game_color in
   line_power + acc
